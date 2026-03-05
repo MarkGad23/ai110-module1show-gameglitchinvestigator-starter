@@ -3,7 +3,7 @@
 ## 🚨 The Situation
 
 You asked an AI to build a simple "Number Guessing Game" using Streamlit.
-It wrote the code, ran away, and now the game is unplayable. 
+It wrote the code, ran away, and now the game is unplayable.
 
 - You can't win.
 - The hints lie to you.
@@ -11,8 +11,8 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 🛠️ Setup
 
-1. Install dependencies: `pip install -r requirements.txt`
-2. Run the broken app: `python -m streamlit run app.py`
+1. Install dependencies: `pip3 install -r requirements.txt`
+2. Run the app: `python3 -m streamlit run app.py`
 
 ## 🕵️‍♂️ Your Mission
 
@@ -25,9 +25,15 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+**Purpose:** A number guessing game where the player tries to guess a secret number within a set number of attempts. The difficulty setting changes the number range and attempt limit.
+
+**Bugs found:**
+1. **Misleading hints** — On every even-numbered attempt, the secret number was converted to a string before comparison. This caused Python to do string comparison (`"60" < "9"` is `True` because `"6" < "9"` alphabetically), giving completely wrong "Too High" / "Too Low" feedback.
+2. **New Game didn't reset** — Clicking "New Game" picked a new secret and reset attempts, but left `score` and `status` unchanged. If you had won or lost, the game immediately showed the end screen again on the next game.
+
+**Fixes applied:**
+1. Moved all game logic (`get_range_for_difficulty`, `parse_guess`, `check_guess`, `update_score`) into `logic_utils.py`. The fixed `check_guess` always compares integers directly — no string conversion.
+2. Added `st.session_state.score = 0`, `st.session_state.status = "playing"`, and `st.session_state.history = []` to the New Game block so every game starts fully fresh.
 
 ## 📸 Demo
 
